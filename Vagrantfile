@@ -7,7 +7,7 @@ Vagrant.configure(2) do |config|
 	
 	config.vm.network "forwarded_port", guest: 80, host: 8080
 
-	#config.vm.synced_folder ".", "/home/vagrant/project/", user: nil, group nil, type: "nfs"
+	config.vm.synced_folder ".", "/home/vagrant/project/"
 	
 	# Settings for virtualbox provider
 	config.vm.provider "virtualbox" do |vb|
@@ -28,9 +28,10 @@ Vagrant.configure(2) do |config|
 	SHELL
 
 	config.vm.provision :puppet do |puppet|
-		puppet.working_directory = "puppet"
+		#puppet.working_directory = "/home/vagrant/project/puppet"
 		puppet.manifests_path = "puppet/manifests"
 		puppet.manifest_file = "init.pp"
+		puppet.options = "--verbose"
 	end
 end
 
