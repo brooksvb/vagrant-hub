@@ -22,15 +22,20 @@ Vagrant.configure(2) do |config|
 	# Ensure puppet is installed on guest machine
 	config.vm.provision "shell", inline: <<-SHELL
 		# Everything here is sudo-ed
-		apt-get update
-		apt-get upgrade -y
-		apt-get install puppet -y
+		# Don't run apt-get updates and upgrade unless necessary
+		if ! [ -x "$(command -v puppet)" ]; then
+			echo 'Puppet not installed, installing...' >&2
+			apt-get update
+			apt-get upgrade -y
+			apt-get install puppet -y
+		fi
 	SHELL
 
 	config.vm.provision :puppet do |puppet|
 		#puppet.working_directory = "/home/vagrant/project/puppet"
 		puppet.manifests_path = "puppet/manifests"
-		puppet.manifest_file = "init.pp"
+		puppet.manifest_file = "site.pp"
+		puppet.module_path = "puppet/modules"
 		puppet.options = "--verbose"
 	end
 end

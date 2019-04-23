@@ -1,13 +1,13 @@
 
-class services {
-	require packages
+class hubconfig::services {
+	require hubconfig::packages
 
 	service { 'apache2':
 		ensure => running,
 		enable => true
 	}
 
-	service { 'mysqld':
+	service { 'mysql':
 		ensure => running,
 		enable => true
 	}
