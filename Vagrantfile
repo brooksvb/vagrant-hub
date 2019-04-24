@@ -3,11 +3,14 @@
 # @url https://www.linuxbabe.com/desktop-linux/how-to-install-virtualbox-guest-additions-on-debian-step-by-step
 
 Vagrant.configure(2) do |config|
-	config.vm.box = "debian/jessie64"
+	#config.vm.box = "debian/jessie64"
+	# Using Vagrant officially recommended bento boxes
+	config.vm.box = "bento/debian-8.11"
 	
 	config.vm.network "forwarded_port", guest: 80, host: 8080
 
-	config.vm.synced_folder ".", "/home/vagrant/project/"
+	# This is a default synced folder
+	#config.vm.synced_folder ".", "/vagrant/"
 	
 	# Settings for virtualbox provider
 	config.vm.provider "virtualbox" do |vb|
