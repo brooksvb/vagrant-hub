@@ -1,2 +1,5 @@
 # Vagrant metadata
 .vagrant/
+
+# Ignore any swp files from things open in vim
+*.swp
