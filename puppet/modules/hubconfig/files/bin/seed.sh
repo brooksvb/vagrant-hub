@@ -1,6 +1,4 @@
 #!/bin/bash
-mysqld --user=mysql &
-sleep 5
 echo "seeding mysql"
 /usr/bin/mysqladmin -u root -h localhost password '94B5FQN3fW8qZ4'
 mysql -u root -p94B5FQN3fW8qZ4 --execute="CREATE USER 'example'@'localhost' IDENTIFIED BY 'YMx7ZE35jw45f9';"
