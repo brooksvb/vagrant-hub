@@ -15,14 +15,16 @@ class hubconfig::cms {
 	}
 
 	$breadcrumb = '/etc/.hubzero_cms_first_time_setup' # path to breadcrumb
-	
+	$db_user_breadcrumb = '/etc/.hubzero_db_usr_first_time_setup'
+	$db_create_breadcrumb = '/etc/.hubzero_db_create_first_time_setup'
+
 	exec { 'clone cms':
 		require => [Package['git'], File['/var/www/dev']],
 		before => File["${breadcrumb}"],
 		path => '/usr/bin/',
 		command => 'git clone https://github.com/hubzero/hubzero-cms /var/www/dev --depth=1',
 		# Test if dir is empty otherwise clone will fail
-		onlyif => '/usr/bin/test -z "$(ls -A /var/www/dev)"',
+		unless => '/usr/bin/test -z "$(ls -A /var/www/dev)"',
 
 		# This makes the command only run if this file doesn't exist
 		creates => "${breadcrumb}", 
@@ -66,16 +68,41 @@ class hubconfig::cms {
 	}
 	***************/
 
-	exec { 'mysql database create': 
-		before => File["${breadcrumb}"],
+	exec { 'mysql user create':
+		before => [File["${db_user_breadcrumb}"], File["${breadcrumb}"]],
 		# TODO: Temporarily removed password, see above: -p94B5FQN3fW8qZ4 
 		command => "/usr/bin/mysql -u root --execute=\"
 			CREATE USER 'example'@'localhost' IDENTIFIED BY 'YMx7ZE35jw45f9';
+			\"
+		",
+		creates => ["${db_user_breadcrumb}", "${breadcrumb}"]
+	}
+
+	file { "${db_user_breadcrumb}":
+		path => "${db_user_breadcrumb}",
+		ensure => present,
+		owner => 'root',
+		group => 'root',
+		mode => '0111'
+	}
+
+	exec { 'mysql db create':
+		before => [File["${db_create_breadcrumb}"], File["${breadcrumb}"]],
+		# TODO: Temporarily removed password, see above: -p94B5FQN3fW8qZ4
+		command => "/usr/bin/mysql -u root --execute=\"
 			GRANT ALL PRIVILEGES ON example.* TO 'example'@'localhost';
 			CREATE DATABASE example;
 			\"
 		",
-		creates => "${breadcrumb}"
+		creates => ["${db_create_breadcrumb}", "${breadcrumb}"]
+	}
+
+	file { "${db_create_breadcrumb}":
+		path => "${db_create_breadcrumb}",
+		ensure => present,
+		owner => 'root',
+		group => 'root',
+		mode => '0111'
 	}
 
 	exec { 'composer setup':
