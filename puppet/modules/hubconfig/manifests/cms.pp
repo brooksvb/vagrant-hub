@@ -17,12 +17,27 @@ class hubconfig::cms {
 	$breadcrumb = '/etc/.hubzero_cms_first_time_setup' # path to breadcrumb
 	
 	exec { 'clone cms':
+		require => [Package['git'], File['/var/www/dev']],
 		before => File["${breadcrumb}"],
 		path => '/usr/bin/',
 		command => 'git clone https://github.com/hubzero/hubzero-cms /var/www/dev --depth=1',
-		creates => "/var/www/dev", # This makes the command only run if this file doesn't exist
-		require => Package['git']
-	}	
+		# Test if dir is empty otherwise clone will fail
+		onlyif => '/usr/bin/test -z "$(ls -A /var/www/dev)"',
+
+		# This makes the command only run if this file doesn't exist
+		creates => "${breadcrumb}", 
+	}
+
+	file { 'default app conf':
+		require => Exec['clone cms'],
+		before => File["${breadcrumb}"],
+		path => '/var/www/dev/app/config/',
+		source => 'puppet:///modules/hubconfig/cms-conf',
+		
+		# Recurse will make this directory mirror the whole source directory
+		recurse => true,
+		recurselimit => 1
+	}
 
 	# Directly executing the command once seems faster than recursive puppet file resource
 	# Only apply to files
@@ -64,9 +79,9 @@ class hubconfig::cms {
 		cwd => '/var/www/dev/core',
 		# This env var is needed for composer run
 		environment => ['COMPOSER_HOME=/home/vagrant'],
+		# Need to add a github key for future composer commands to not fail
 		command => '/usr/bin/php5 ./bin/composer config -g github-oauth.github.com \
-				1494e134d21100c55fcd4f0f65bf07b2e551e745 && \
-				/usr/bin/php5 ./bin/composer update',
+				1494e134d21100c55fcd4f0f65bf07b2e551e745',
 		creates => "${breadcrumb}"
 	}
 
@@ -75,7 +90,10 @@ class hubconfig::cms {
 		require => Exec['clone cms'],
 		cwd => '/var/www/dev/core',
 		environment => ['COMPOSER_HOME=/home/vagrant'],
-		command => '/usr/bin/php5 ./bin/composer require firebase/php-jwt',
+		# TODO: The current HZ repo composer.lock is invalid and update is needed.
+		# This shouldn't be the case; cloning and running "install" should be what
+		# is necessary to get running.
+		command => '/usr/bin/php5 ./bin/composer update',
 		creates => "${breadcrumb}"
 	}
 
