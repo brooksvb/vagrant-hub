@@ -7,5 +7,6 @@ return array(
 	'db' => 'example',
 	'dbcharset' => '',
 	'dbcollation' => '',
+	// Why this prefix?
 	'dbprefix' => 'jos_',
 );
