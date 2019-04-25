@@ -15,20 +15,27 @@ class hubconfig::cms {
 	}
 
 	$breadcrumb = '/etc/.hubzero_cms_first_time_setup' # path to breadcrumb
+	$repo_clone_breadcrumb = '/etc/.hubzero_clone_first_time_setup'
 	$db_user_breadcrumb = '/etc/.hubzero_db_usr_first_time_setup'
 	$db_create_breadcrumb = '/etc/.hubzero_db_create_first_time_setup'
 	$db_seed_breadcrumb = '/etc/.hubzero_db_seed_first_time_setup'
 
 	exec { 'clone cms':
 		require => [Package['git'], File['/var/www/dev']],
-		before => File["${breadcrumb}"],
+		before => [File["${repo_clone_breadcrumb}"], File["${breadcrumb}"]],
 		path => '/usr/bin/',
 		command => 'git clone https://github.com/hubzero/hubzero-cms /var/www/dev --depth=1',
-		# Test if dir is empty otherwise clone will fail
-		unless => '/usr/bin/test -z "$(ls -A /var/www/dev)"',
 
 		# This makes the command only run if this file doesn't exist
-		creates => "${breadcrumb}", 
+		creates => ["${repo_clone_breadcrumb}", "${breadcrumb}"],
+	}
+
+	file { "${repo_clone_breadcrumb}":
+		path => "${repo_clone_breadcrumb}",
+		ensure => present,
+		owner => 'root',
+		group => 'root',
+		mode => '0111'
 	}
 
 	file { 'default app conf':
@@ -112,7 +119,7 @@ class hubconfig::cms {
 		require => Exec['mysql db create'],
 		before => [File["${db_seed_breadcrumb}"], File["${breadcrumb}"]],
 		# TODO: Temporarily removed password, see above: -p94B5FQN3fW8qZ4
-		command => "/usr/bin/mysql -u root \
+		command => "/usr/bin/mysql -u root example \
 			< /vagrant/puppet/modules/hubconfig/files/bin/setup.sql
 		",
 		creates => ["${db_seed_breadcrumb}", "${breadcrumb}"]
