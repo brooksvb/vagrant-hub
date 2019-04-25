@@ -56,15 +56,20 @@ class hubconfig::cms {
 		creates => "${breadcrumb}"
 	}
 
+	/**************
+	# TODO:
+	# Temporarily disable password set. This should be done better using Hiera and Puppet Mysql module
 	exec { 'cms root password': 
 		before => File["${breadcrumb}"], # Ensure this runs before breadcrumb is created
 		command => "/usr/bin/mysqladmin -u root -h localhost password '94B5FQN3fW8qZ4'",
 		creates => "${breadcrumb}" # Don't run if breadcrumb exists
 	}
+	***************/
 
 	exec { 'mysql database create': 
 		before => File["${breadcrumb}"],
-		command => "/usr/bin/mysql -u root -p94B5FQN3fW8qZ4 --execute=\"
+		# TODO: Temporarily removed password, see above: -p94B5FQN3fW8qZ4 
+		command => "/usr/bin/mysql -u root --execute=\"
 			CREATE USER 'example'@'localhost' IDENTIFIED BY 'YMx7ZE35jw45f9';
 			GRANT ALL PRIVILEGES ON example.* TO 'example'@'localhost';
 			CREATE DATABASE example;
