@@ -2,6 +2,14 @@
 class hubconfig::apache {
 	require hubconfig::packages
 
+	# Make sure default vagrant user is in www-data group
+	exec { 'vagrant in www-data':
+		require => Package['apache2'],
+		command => '/usr/sbin/usermod -a -G www-data vagrant',
+		# Test if vagrant in www-data
+		unless => '/usr/bin/id -nG vagrant | grep -qw "www-data"'
+	}
+
 	# Enable modules
 	define hubconfig::apache::loadmodule ($module = $title) {
 		exec { "a2enmod $module" :
