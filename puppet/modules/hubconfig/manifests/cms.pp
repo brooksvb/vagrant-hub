@@ -43,6 +43,7 @@ class hubconfig::cms {
 		before => File["${breadcrumb}"],
 		path => '/var/www/dev/app/config/',
 		source => 'puppet:///modules/hubconfig/cms-conf',
+		group => 'www-data',
 		
 		# Recurse will make this directory mirror the whole source directory
 		recurse => true,
