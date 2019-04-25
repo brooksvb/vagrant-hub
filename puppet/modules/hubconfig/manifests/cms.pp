@@ -20,14 +20,24 @@ class hubconfig::cms {
 		before => File["${breadcrumb}"],
 		path => '/usr/bin/',
 		command => 'git clone https://github.com/hubzero/hubzero-cms /var/www/dev --depth=1',
-		creates => "${breadcrumb}", # This makes the command only run if this file doesn't exist
+		creates => "/var/www/dev", # This makes the command only run if this file doesn't exist
 		require => Package['git']
 	}	
 
 	# Directly executing the command once seems faster than recursive puppet file resource
-	exec { 'chmod /var/www/dev':
+	# Only apply to files
+	exec { 'file chown /var/www/dev':
 		require => Exec['clone cms'],
-		command => '/bin/chmod 2664 /var/www/dev -R',
+		command => '/usr/bin/find /var/www/dev -type f -print0 | \
+			/usr/bin/xargs -0 /bin/chmod 0664',
+		creates => "${breadcrumb}"
+	}
+
+	# Only apply to dirs
+	exec { 'dir chown /var/www/dev':
+		require => Exec['clone cms'],
+		command => '/usr/bin/find /var/www/dev -type d -print0 | \
+			/usr/bin/xargs -0 /bin/chmod 2774',
 		creates => "${breadcrumb}"
 	}
 
@@ -52,6 +62,8 @@ class hubconfig::cms {
 		before => File["${breadcrumb}"],
 		require => Exec['clone cms'],
 		cwd => '/var/www/dev/core',
+		# This env var is needed for composer run
+		environment => ['COMPOSER_HOME=/home/vagrant'],
 		command => '/usr/bin/php5 ./bin/composer config -g github-oauth.github.com \
 				1494e134d21100c55fcd4f0f65bf07b2e551e745 && \
 				/usr/bin/php5 ./bin/composer update',
@@ -62,6 +74,7 @@ class hubconfig::cms {
 		before => File["${breadcrumb}"],
 		require => Exec['clone cms'],
 		cwd => '/var/www/dev/core',
+		environment => ['COMPOSER_HOME=/home/vagrant'],
 		command => '/usr/bin/php5 ./bin/composer require firebase/php-jwt',
 		creates => "${breadcrumb}"
 	}
