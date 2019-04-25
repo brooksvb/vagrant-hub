@@ -7,7 +7,11 @@ class hubconfig::packages {
 		returns => [0, 100]
 	}
 
-	$packages = ['apache2', 'php5', 'php5-curl', 'php5-mysql', 'mysql-server', 'mysql-client', 'git', 'vim']
+	$packages = [
+		'apache2', 'php5', 'php5-curl', 
+		'php5-mysql', 'php5-gd', 'mysql-server', 
+		'mysql-client', 'git', 'vim'
+	]
 
 	package { $packages:
 		ensure => 'installed',
