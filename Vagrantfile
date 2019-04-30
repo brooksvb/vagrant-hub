@@ -7,7 +7,8 @@ Vagrant.configure(2) do |config|
 	# Using Vagrant officially recommended bento boxes
 	config.vm.box = "bento/debian-8.11"
 	
-	config.vm.network "forwarded_port", guest: 80, host: 8080
+	#config.vm.network "forwarded_port", guest: 80, host: 8080
+	config.vm.network "forwarded_port", guest: 443, host: 8080
 
 	# This is a default synced folder
 	#config.vm.synced_folder ".", "/vagrant/"
