@@ -21,7 +21,7 @@ class hubconfig::apache {
 		}
 	}
 
-	$modules = ['slotmem_shm', 'rewrite']
+	$modules = ['slotmem_shm', 'rewrite', 'ssl', 'proxy']
 
 	hubconfig::apache::loadmodule { $modules: }
 
