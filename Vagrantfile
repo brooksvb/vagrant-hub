@@ -1,7 +1,4 @@
 
-# Followed this guide to install vboxguestadditions, then need to run `vagrant reload --provision`
-# @url https://www.linuxbabe.com/desktop-linux/how-to-install-virtualbox-guest-additions-on-debian-step-by-step
-
 Vagrant.configure(2) do |config|
 	#config.vm.box = "debian/jessie64"
 	# Using Vagrant officially recommended bento boxes
