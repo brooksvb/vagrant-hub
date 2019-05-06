@@ -21,7 +21,7 @@ class hubconfig::apache {
 		}
 	}
 
-	$modules = ['slotmem_shm', 'rewrite', 'ssl', 'proxy']
+	$modules = ['slotmem_shm', 'rewrite', 'ssl', 'proxy', 'socache_shmcb']
 
 	hubconfig::apache::loadmodule { $modules: }
 
@@ -53,18 +53,18 @@ class hubconfig::apache {
 	}
 
 	# Link to hubzero conf to enable site
-	file { 'hubzero.conf.link':
-		require => File['hubzero.conf'],
-		path => '/etc/apache2/sites-enabled/hubzero-dev.conf',
-		ensure => link,
-		target => '../sites-available/hubzero-dev.conf',
-		notify => Service['apache2']
-	}
-	#file { 'hubzero-ssl.conf.link':
-	#	path => '/etc/apache2/sites-enabled/hubzero-dev-ssl.conf',
+	#file { 'hubzero.conf.link':
+	#	require => File['hubzero.conf'],
+	#	path => '/etc/apache2/sites-enabled/hubzero-dev.conf',
 	#	ensure => link,
-	#	target => '../sites-available/hubzero-dev-ssl.conf',
+	#	target => '../sites-available/hubzero-dev.conf',
 	#	notify => Service['apache2']
 	#}
+	file { 'hubzero-ssl.conf.link':
+		path => '/etc/apache2/sites-enabled/hubzero-dev-ssl.conf',
+		ensure => link,
+		target => '../sites-available/hubzero-dev-ssl.conf',
+		notify => Service['apache2']
+	}
 
 }
