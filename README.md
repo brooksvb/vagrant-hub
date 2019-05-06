@@ -1,4 +1,4 @@
-# vagrant-puppet
+# vagrant-hub
 
 ## Description
 This is a Vagrant/Puppet configuration for the automated provisioning and setup of a Debian 8 virtual machine hosting the [HUBzero example CMS](https://github.com/hubzero/hubzero-cms).
