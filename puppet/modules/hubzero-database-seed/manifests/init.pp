@@ -72,10 +72,10 @@ class hubzero-database-seed {
     }
 
     exec { 'muse setup':
-        before => File["${breadcrumb}"],
+        # before => File["${breadcrumb}"],
         require => [Exec['clone cms'], Exec['mysql db seed']],
         cwd => '/var/www/dev',
         command => '/usr/bin/php5 ./muse migration -i -f',
-        creates => "${breadcrumb}"
+        # creates => "${breadcrumb}"
     }
 }

@@ -1,4 +1,8 @@
 class hubzero-cms-setup {
+	package { 'git':
+		ensure => 'installed'
+	}
+
 	file { '/var/www/dev':
 		ensure => directory,
 		owner => 'www-data',
