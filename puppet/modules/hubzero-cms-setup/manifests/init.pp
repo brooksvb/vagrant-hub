@@ -40,6 +40,7 @@ class hubzero-cms-setup {
 		path => '/var/www/dev/app/config/',
 		source => 'puppet:///modules/hubconfig/cms-conf',
 		group => 'www-data',
+		mode => '0664',
 
 		# Recurse will make this directory mirror the whole source directory
 		recurse => true,
