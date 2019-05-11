@@ -26,9 +26,17 @@ Vagrant.configure(2) do |config|
 		# Don't run apt-get updates and upgrade unless necessary
 		if ! [ -x "$(command -v puppet)" ]; then
 			echo 'Puppet not installed, installing...' >&2
-			apt-get update
-			apt-get upgrade -y
-			apt-get install puppet -y
+			cd /tmp
+			wget https://apt.puppetlabs.com/puppet5-release-jessie.deb
+            dpkg -i puppet5-release-jessie.deb
+            rm puppet5-release-jessie.deb
+
+            apt-get update
+            apt-get upgrade -y
+            apt-get install puppet-agent -y
+
+            # Add link to bin
+            ln -s /opt/puppetlabs/puppet/bin/puppet /usr/bin
 		fi
 	SHELL
 
