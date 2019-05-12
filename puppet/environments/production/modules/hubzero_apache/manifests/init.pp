@@ -1,4 +1,4 @@
-class hubzero-apache {
+class hubzero_apache {
 
     package { 'apache2':
         ensure => installed
@@ -19,7 +19,7 @@ class hubzero-apache {
 	}
 
 	# Enable modules
-	define hubconfig::apache::loadmodule ($module = $title) {
+	define loadmodule ($module = $title) {
 		exec { "a2enmod $module" :
 			# Using real a2enmod command errors saying it cannot read /etc/apache2/envvars
 			cwd => '/etc/apache2/mods-enabled',
@@ -31,13 +31,13 @@ class hubzero-apache {
 
 	$modules = ['slotmem_shm', 'rewrite', 'ssl', 'proxy', 'socache_shmcb']
 
-	hubconfig::apache::loadmodule { $modules: }
+	hubzero_apache::loadmodule { $modules: }
 
 	# Set default values for following resources
 	File {
 		owner => 'root',
 		group => 'root',
-		mode => 0644 # rw for owner, r otherwise
+		mode => '0644' # rw for owner, r otherwise
 	}
 
 	# Disable default apache site conf

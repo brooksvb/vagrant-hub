@@ -41,10 +41,9 @@ Vagrant.configure(2) do |config|
 	SHELL
 
 	config.vm.provision :puppet do |puppet|
-		#puppet.working_directory = "/home/vagrant/project/puppet"
-		puppet.manifests_path = "puppet/manifests"
-		puppet.manifest_file = "site.pp"
-		puppet.module_path = "puppet/modules"
+		puppet.environment_path = "puppet/environments"
+		puppet.environment = "production"
+		puppet.module_path = ["puppet/environments/production/modules","puppet/forge_modules"]
 		puppet.options = "--verbose"
 	end
 end

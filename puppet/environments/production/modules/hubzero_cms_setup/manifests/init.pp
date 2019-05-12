@@ -1,4 +1,4 @@
-class hubzero-cms-setup {
+class hubzero_cms_setup {
 	package { 'git':
 		ensure => 'installed'
 	}

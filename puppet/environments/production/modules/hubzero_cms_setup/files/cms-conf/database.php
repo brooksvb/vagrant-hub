@@ -4,7 +4,7 @@ return array(
 	'host' => 'localhost',
 	'user' => 'example',
 	'password' => 'YMx7ZE35jw45f9',
-	'db' => 'example',
+	'db' => 'exampledb',
 	'dbcharset' => '',
 	'dbcollation' => '',
 	// Why this prefix?
