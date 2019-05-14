@@ -1,6 +1,9 @@
 # Vagrant metadata
 .vagrant/
 
+puppet/forge_modules/*
+!puppet/forge_modules/.gitkeep
+
 # Ignore any swp files from things open in vim
 *.swp
 
