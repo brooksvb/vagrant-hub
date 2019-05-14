@@ -22,7 +22,7 @@ class hubzero_mysql {
   }
 
   exec { 'muse setup':
-    require => [Exec['clone cms'], Mysql::Db['exampledb']],
+    require => [Exec['clone cms'], Mysql::Db['exampledb'], Exec['composer install']],
     cwd => '/var/www/dev',
     command => '/usr/bin/php5 ./muse migration -i -f',
   }
