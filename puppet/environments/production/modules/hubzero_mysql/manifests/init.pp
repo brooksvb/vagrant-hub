@@ -21,7 +21,7 @@ class hubzero_mysql {
     user     => 'example',
     password => 'YMx7ZE35jw45f9',
     host     => 'localhost',
-    grant    => ['SELECT', 'UPDATE'],
+    grant    => ['ALL'],
     sql => "puppet:///modules/hubzero_mysql/seed.sql"
   }
 
