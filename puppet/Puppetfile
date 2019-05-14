@@ -1,3 +1,4 @@
+moduledir './forge_modules'
 forge "http://forge.puppetlabs.com"
 
 mod 'puppetlabs-stdlib', '5.2.0'
