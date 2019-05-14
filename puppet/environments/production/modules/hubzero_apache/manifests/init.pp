@@ -18,6 +18,12 @@ class hubzero_apache {
 		unless => '/usr/bin/id -nG vagrant | grep -qw "www-data"'
 	}
 
+	exec { "a2dismod mpm_event":
+		cwd => '/etc/apache2/mods-enabled',
+		command => '/bin/rm /etc/apache2/mods-enabled/mpm_event*',
+		notify => Service['apache2']
+	}
+
 	# Enable modules
 	define loadmodule ($module = $title) {
 		exec { "a2enmod $module" :
@@ -25,11 +31,11 @@ class hubzero_apache {
 			cwd => '/etc/apache2/mods-enabled',
 			command => "/bin/ln -s ../mods-available/${module}.load ./",
 			unless => "/bin/readlink -e /etc/apache2/mods-enabled/${module}.load",
-			notify => Service[apache2]
+			notify => Service['apache2']
 		}
 	}
 
-	$modules = ['slotmem_shm', 'rewrite', 'ssl', 'proxy', 'socache_shmcb']
+	$modules = ['slotmem_shm', 'rewrite', 'ssl', 'proxy', 'socache_shmcb', 'mpm_prefork']
 
 	hubzero_apache::loadmodule { $modules: }
 
@@ -50,13 +56,13 @@ class hubzero_apache {
 	file { 'hubzero.conf':
 		path => '/etc/apache2/sites-available/hubzero-dev.conf',
 		ensure => present,
-		source => "puppet:///modules/hubzero-apache/apache-conf/hubzero-dev.conf",
+		source => 'puppet:///modules/hubzero_apache/hubzero-dev.conf',
 		notify => Service['apache2']
 	}
 	file { 'hubzero-ssl.conf':
 		path => '/etc/apache2/sites-available/hubzero-dev-ssl.conf',
 		ensure => present,
-		source => "puppet:///modules/hubconfig/apache-conf/hubzero-dev-ssl.conf",
+		source => 'puppet:///modules/hubzero_apache/hubzero-dev-ssl.conf',
 		notify => Service['apache2']
 	}
 

@@ -1,3 +1,4 @@
+# This file specifies what third-party modules need to be installed by r10k
 moduledir './forge_modules'
 forge "http://forge.puppetlabs.com"
 

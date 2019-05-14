@@ -38,7 +38,7 @@ class hubzero_cms_setup {
 		require => Exec['clone cms'],
 		before => File["${breadcrumb}"],
 		path => '/var/www/dev/app/config/',
-		source => 'puppet:///modules/hubconfig/cms-conf',
+		source => 'puppet:///modules/hubzero_cms_setup/cms-conf',
 		group => 'www-data',
 		mode => '0664',
 
