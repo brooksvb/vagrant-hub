@@ -20,9 +20,8 @@ Vagrant.configure(2) do |config|
 		vb.cpus = "2"
 	end
 
-	# Ensure puppet is installed on guest machine
 	config.vm.provision "shell", inline: <<-SHELL
-		# Everything here is sudo-ed
+		# Running as root
 		# Don't run apt-get updates and upgrade unless necessary
 		if ! [ -x "$(command -v puppet)" ]; then
 			echo 'Puppet not installed, installing...' >&2
@@ -35,9 +34,21 @@ Vagrant.configure(2) do |config|
             apt-get upgrade -y
             apt-get install puppet-agent -y
 
+            # Using apt to install r10k gives an outdated version
+            # Most recent version requires ruby 2.3 which is not bundled with this puppet release
+            /opt/puppetlabs/puppet/bin/gem install r10k -v 2.6.2
+
             # Add link to bin
             ln -s /opt/puppetlabs/puppet/bin/puppet /usr/bin
+            ln -s /opt/puppetlabs/puppet/bin/r10k /usr/bin
+
+            echo 'Installing third-party Puppet modules...' >&2
+            cd /vagrant/puppet/
+            r10k puppetfile install
+
 		fi
+
+
 	SHELL
 
 	config.vm.provision :puppet do |puppet|
