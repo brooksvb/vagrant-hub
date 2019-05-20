@@ -6,12 +6,11 @@ mod 'puppetlabs-stdlib', '5.2.0'
 mod 'puppetlabs-translate', '1.2.0'
 mod 'puppetlabs-mysql', '8.1.0'
 
-mod 'puppetlabs-concat', '5.3.0'
-mod 'puppetlabs-apache', '4.1.0'
-
-mod 'puppetlabs-inifile', '3.0.0'
-
-mod 'puppet-php', '6.0.2'
-mod 'puppetlabs-apt', '7.0.1'
-mod 'puppet-zypprepo', '2.2.2'
-mod 'puppet-archive', '3.2.1'
+# These modules aren't utilized yet so don't install
+#mod 'puppetlabs-inifile', '3.0.0'
+#mod 'puppetlabs-concat', '5.3.0'
+#mod 'puppetlabs-apache', '4.1.0'
+#mod 'puppet-php', '6.0.2'
+#mod 'puppetlabs-apt', '7.0.1'
+#mod 'puppet-zypprepo', '2.2.2'
+#mod 'puppet-archive', '3.2.1'
