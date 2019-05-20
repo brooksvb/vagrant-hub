@@ -17,3 +17,15 @@ This workflow has only been tested on Ubuntu, but will likely work on any Linux 
 
 Using this workflow on Windows may pose additional concerns, specifically due to some 
 unavoidable differences in the filesystem.
+
+## TODO List
+* Add alias for running puppet in VM
+* Add metadata to hubzero modules for dependencies and descriptions
+* Add dependencies within each module so as to not rely on outside dependency definitions
+    * Not sure what the best practice is to architect this in puppet
+* Restructure environments into production and dev, with modules outside
+* Add hubzero_mailhog module
+* Add a simple bash prompt module (clear indication of being inside VM, add colors for clarity)
+* Add support for selecting PHP version
+* Add support for specifying desired default passwords and accounts
+* Use official hubzero-cms database schema and seed instead of the one of unknown source
