@@ -20,23 +20,41 @@ Vagrant.configure(2) do |config|
 		vb.cpus = "2"
 	end
 
-	# Ensure puppet is installed on guest machine
 	config.vm.provision "shell", inline: <<-SHELL
-		# Everything here is sudo-ed
+		# Running as root
 		# Don't run apt-get updates and upgrade unless necessary
 		if ! [ -x "$(command -v puppet)" ]; then
 			echo 'Puppet not installed, installing...' >&2
-			apt-get update
-			apt-get upgrade -y
-			apt-get install puppet -y
+			cd /tmp
+			wget https://apt.puppetlabs.com/puppet5-release-jessie.deb
+            dpkg -i puppet5-release-jessie.deb
+            rm puppet5-release-jessie.deb
+
+            apt-get update
+            apt-get upgrade -y
+            apt-get install puppet-agent -y
+
+            # Using apt to install r10k gives an outdated version
+            # Most recent version requires ruby 2.3 which is not bundled with this puppet release
+            /opt/puppetlabs/puppet/bin/gem install r10k -v 2.6.2
+
+            # Add link to bin
+            ln -s /opt/puppetlabs/puppet/bin/puppet /usr/bin
+            ln -s /opt/puppetlabs/puppet/bin/r10k /usr/bin
+
+            echo 'Installing third-party Puppet modules...' >&2
+            cd /vagrant/puppet/
+            r10k puppetfile install
+
 		fi
+
+
 	SHELL
 
 	config.vm.provision :puppet do |puppet|
-		#puppet.working_directory = "/home/vagrant/project/puppet"
-		puppet.manifests_path = "puppet/manifests"
-		puppet.manifest_file = "site.pp"
-		puppet.module_path = "puppet/modules"
+		puppet.environment_path = "puppet/environments"
+		puppet.environment = "production"
+		puppet.module_path = ["puppet/environments/production/modules","puppet/forge_modules"]
 		puppet.options = "--verbose"
 	end
 end
