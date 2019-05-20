@@ -3,38 +3,24 @@ class hubzero_xdebug {
     ensure => present
   }
 
-  $apache_php_ini = '/etc/php5/apache2/php.ini'
+  #$apache_php_ini = '/etc/php5/apache2/php.ini'
+  $php_conf_xdebug_ini = '/etc/php5/cli/conf.d/20-xdebug.ini'
 
-  ini_setting { 'xdebug_extension':
-    ensure => present,
-    path => $apache_php_ini,
-    section => 'xdebug',
-    setting => 'zend_extension',
-    value => 'xdebug.so'
+  $defaults = {
+    'ensure' => present,
+    'path' => $php_conf_xdebug_ini,
   }
+  $xdebug_section = {
+    '' => {
+      'zend_extension' => 'xdebug.so',
+      'xdebug.remote_enable' => '1',
+      # This is the default gateway for Vagrant
+      'xdebug.remote_host' => '10.0.2.2',
+      'xdebug.remote_port' => '9000'
+    }
+  }
+  create_ini_settings($xdebug_section, $defaults)
 
-  ini_setting { 'xdebug_remote_enable':
-    ensure => present,
-    path => $apache_php_ini,
-    section => 'xdebug',
-    setting => 'xdebug.remote_enable',
-    value => '1'
-  }
 
-  ini_setting { 'xdebug_remote_host':
-    ensure => present,
-    path => $apache_php_ini,
-    section => 'xdebug',
-    setting => 'xdebug.remote_host',
-    # This is the default gateway for Vagrant
-    value => '10.0.2.2'
-  }
 
-  ini_setting { 'xdebug_remote_port':
-    ensure => present,
-    path => $apache_php_ini,
-    section => 'xdebug',
-    setting => 'xdebug.remote_port',
-    value => '9000'
-  }
 }
