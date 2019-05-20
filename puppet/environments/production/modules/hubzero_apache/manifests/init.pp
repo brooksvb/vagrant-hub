@@ -18,9 +18,10 @@ class hubzero_apache {
 		unless => '/usr/bin/id -nG vagrant | grep -qw "www-data"'
 	}
 
-	exec { "a2dismod mpm_event":
-		cwd => '/etc/apache2/mods-enabled',
-		command => '/bin/rm /etc/apache2/mods-enabled/mpm_event*',
+	# mpm_event needs to be disabled before enabling mpm_prefork
+	file {'mpm_event.load':
+		path => '/etc/apache2/mods-enabled/mpm_event.load',
+		ensure => absent,
 		notify => Service['apache2']
 	}
 
