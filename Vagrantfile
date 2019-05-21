@@ -7,6 +7,9 @@ Vagrant.configure(2) do |config|
 	#config.vm.network "forwarded_port", guest: 80, host: 8080
 	config.vm.network "forwarded_port", guest: 443, host: 8080
 
+	# Forward port for mailhog web UI
+	config.vm.network "forwarded_port", guest: 8025, host: 8025
+
 	# This is a default synced folder
 	#config.vm.synced_folder ".", "/vagrant/"
 	
