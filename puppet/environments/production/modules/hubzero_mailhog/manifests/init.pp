@@ -14,24 +14,21 @@ class hubzero_mailhog {
   }
 
   # Configure daemon as a service
-  class { 'hubzero_mailhog::daemonize_install': }
 
-  file { 'init.d/mailhog':
-    path => '/etc/init.d/mailhog',
+  file { 'systemd/mailhog.service':
+    path => '/etc/systemd/system/mailhog.service',
     ensure => present,
-    source => 'puppet:///modules/hubzero_mailhog/init.d.mailhog',
+    source => 'puppet:///modules/hubzero_mailhog/mailhog.service',
     owner => 'root',
     group => 'root',
     mode => '0755',
   }
 
-  file { 'systemd/mailhog.service':
-    path => '/etc/systemd/system/mailhog.service',
-    ensure => present,
-    source => '',
-    owner => 'root',
-    group => 'root',
-    mode => '0755',
+  service { 'mailhog':
+    require => File['systemd/mailhog.service'],
+    ensure => running,
+    enable => true,
+    provider => 'systemd'
   }
 
   Class['hubzero_mailhog::go'] -> Exec['install_mailhog']
