@@ -13,7 +13,7 @@ machine's port 8080 is forwarded to the website, so visit
 The default administrator account is user `admin` with password `password!`.
 
 ## Supported Systems
-This workflow has only been tested on Ubuntu, but will likely work on any Linux distribution.
+This workflow has only been tested on Debian 8, but will likely work on most Linux distribution.
 
 Using this workflow on Windows may pose additional concerns, specifically due to some 
 unavoidable differences in the filesystem.
