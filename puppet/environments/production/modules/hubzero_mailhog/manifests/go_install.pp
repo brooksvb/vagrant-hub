@@ -1,5 +1,6 @@
 class hubzero_mailhog::go_install {
 
+  # Each resource has a check to not execute if go is already installed
   Exec['wget go'] -> Exec['extract go']
 
   # Download
@@ -22,6 +23,6 @@ class hubzero_mailhog::go_install {
   file { 'go_path.sh':
     ensure => present,
     path => '/etc/profile.d/go_path.sh',
-    content => "export PATH=$PATH:/usr/local/go/bin:/usr/local/go-pkg/bin; export GOPATH=${gopath}",
+    content => "export PATH=\$PATH:/usr/local/go/bin:/usr/local/go-pkg/bin; export GOPATH=${gopath}",
   }
 }

@@ -2,7 +2,7 @@ class hubzero_mailhog {
   # Path for go package installs, not for base go installation
   $gopath = '/usr/local/go-pkg';
 
-  # Install Go if it does not exist
+  # Install Go
   class { 'hubzero_mailhog::go_install': }
 
   # Install MailHog through Go
@@ -14,7 +14,6 @@ class hubzero_mailhog {
   }
 
   # Configure daemon as a service
-
   file { 'systemd/mailhog.service':
     path => '/etc/systemd/system/mailhog.service',
     ensure => present,
@@ -25,11 +24,12 @@ class hubzero_mailhog {
   }
 
   service { 'mailhog':
+    # TODO: Use a template for inserting a dynamic gopath for binary
     require => File['systemd/mailhog.service'],
     ensure => running,
     enable => true,
     provider => 'systemd'
   }
 
-  Class['hubzero_mailhog::go'] -> Exec['install_mailhog']
+  Class['hubzero_mailhog::go'] -> Exec['install_mailhog'] -> Service['mailhog']
 }
