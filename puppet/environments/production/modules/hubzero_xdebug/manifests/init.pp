@@ -1,4 +1,7 @@
 class hubzero_xdebug {
+  #require Service[apache2]
+  #require Package[php5]
+
   package { 'php5-xdebug':
     ensure => present
   }
@@ -9,6 +12,7 @@ class hubzero_xdebug {
   $defaults = {
     'ensure' => present,
     'path' => $php_conf_xdebug_ini,
+    'notify' => Service[apache2]
   }
   $xdebug_section = {
     '' => {
@@ -20,7 +24,5 @@ class hubzero_xdebug {
     }
   }
   create_ini_settings($xdebug_section, $defaults)
-
-
 
 }

@@ -5,7 +5,7 @@ class hubzero_mailhog::go_install {
 
   # Download
   exec { 'wget go':
-    path => '/usr/bin/wget',
+    path => '/usr/bin',
     cwd => '/tmp',
     command => 'wget https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz',
     creates => '/tmp/go1.12.5.linux-amd64.tar.gz'
@@ -13,7 +13,7 @@ class hubzero_mailhog::go_install {
 
   # Extract
   exec { 'extract go':
-    path => '/bin/tar',
+    path => '/bin',
     cwd => '/tmp',
     command => 'tar -C /usr/local -xzf go1.12.5.linux-amd64.tar.gz',
     creates => '/usr/local/go'
@@ -23,6 +23,6 @@ class hubzero_mailhog::go_install {
   file { 'go_path.sh':
     ensure => present,
     path => '/etc/profile.d/go_path.sh',
-    content => "export PATH=\$PATH:/usr/local/go/bin:/usr/local/go-pkg/bin; export GOPATH=${gopath}",
+    content => "export PATH=\$PATH:/usr/local/go/bin:/usr/local/go-pkg/bin; export GOPATH=${hubzero_mailhog::gopath}",
   }
 }
