@@ -20,10 +20,11 @@ class hubzero_cms_setup {
 		require => [Package['git'], File['/var/www/dev']],
 		before => [File["${repo_clone_breadcrumb}"], File["${breadcrumb}"]],
 		path => '/usr/bin/',
-		command => 'git clone https://github.com/hubzero/hubzero-cms /var/www/dev --depth=1',
+		command => 'git clone https://github.com/hubzero/hubzero-cms /tmp/dev_clone --depth=1 && \
+								/bin/mv /tmp/dev_clone/* /var/www/dev',
 
 		# This makes the command only run if this file doesn't exist
-		creates => ["${repo_clone_breadcrumb}", "${breadcrumb}"],
+		creates => ["${repo_clone_breadcrumb}", "${breadcrumb}", '/var/www/dev/core'],
 	}
 
 	file { "${repo_clone_breadcrumb}":
@@ -84,7 +85,7 @@ class hubzero_cms_setup {
 		# TODO: The current HZ repo composer.lock is invalid and update is needed.
 		# This shouldn't be the case; cloning and running "install" should be what
 		# is necessary to get running.
-		command => '/usr/bin/php5 ./bin/composer update',
+		command => '/usr/bin/php5 ./bin/composer install',
 		creates => "${breadcrumb}"
 	}
 

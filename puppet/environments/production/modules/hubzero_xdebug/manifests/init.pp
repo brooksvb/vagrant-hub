@@ -12,7 +12,10 @@ class hubzero_xdebug {
   $defaults = {
     'ensure' => present,
     'path' => $php_conf_xdebug_ini,
-    'notify' => Service[apache2]
+    # This causes a dependency cycle for some reason
+    #'notify' => Service["apache2"]
+    # Alternative:
+    'before' => Exec['refresh apache']
   }
   $xdebug_section = {
     '' => {
@@ -25,4 +28,9 @@ class hubzero_xdebug {
   }
   create_ini_settings($xdebug_section, $defaults)
 
+  exec { 'refresh apache':
+    cwd => '/',
+    path => '/bin',
+    command => 'systemctl restart apache2'
+  }
 }
