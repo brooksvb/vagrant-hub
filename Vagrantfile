@@ -3,7 +3,9 @@ Vagrant.configure(2) do |config|
 	#config.vm.box = "debian/jessie64"
 	# Using Vagrant officially recommended bento boxes
 	config.vm.box = "bento/debian-8.11"
-	
+
+	#config.vm.network :private_network, ip: 192.168.10.10
+
 	#config.vm.network "forwarded_port", guest: 80, host: 8080
 	config.vm.network "forwarded_port", guest: 443, host: 8080
 
@@ -21,7 +23,7 @@ Vagrant.configure(2) do |config|
 
 		# Set memory and cpu limit
 		vb.memory = "2048"
-		vb.cpus = "2"
+		vb.cpus = "1"
 	end
 
 	config.vm.provision "shell", inline: <<-SHELL
