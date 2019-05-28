@@ -82,9 +82,6 @@ class hubzero_cms_setup {
 		require => Exec['clone cms'],
 		cwd => '/var/www/dev/core',
 		environment => ['COMPOSER_HOME=/home/vagrant'],
-		# TODO: The current HZ repo composer.lock is invalid and update is needed.
-		# This shouldn't be the case; cloning and running "install" should be what
-		# is necessary to get running.
 		command => '/usr/bin/php5 ./bin/composer install',
 		creates => "${breadcrumb}"
 	}
