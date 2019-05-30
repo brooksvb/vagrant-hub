@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
 
 	# This is a default synced folder
 	#config.vm.synced_folder ".", "/vagrant/"
-	config.vm.synced_folder "./dev", "/var/www/dev", type: "nfs"
+	#config.vm.synced_folder "./dev", "/var/www/dev", type: "nfs"
 	
 	# Settings for virtualbox provider
 	config.vm.provider "virtualbox" do |vb|
