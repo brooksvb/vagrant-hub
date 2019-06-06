@@ -31,6 +31,8 @@ on your local machine, and then you should be good to go.
 ### MailHog
 MailHog is installed on the machine for mail debugging, but has not been thoroughly tested yet.
 
+It is accessible at [localhost:8025](http://localhost:8025)
+
 ## Vagrant Tips
 `vagrant up` - Creates a machine if nonexistent, otherwise turns existing machine on
 
