@@ -14,6 +14,7 @@ The default administrator account is user `admin` with password `password!`.
 
 ## Vagrant Tips
 ...
+
 ## PhpStorm Tips
 ...
 
