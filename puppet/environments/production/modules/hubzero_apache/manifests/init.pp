@@ -1,16 +1,16 @@
 class hubzero_apache {
 
-    package { 'apache2':
-        ensure => installed
-    }
+	package { 'apache2':
+			ensure => installed
+	}
 
-    service { 'apache2':
-        require => Package['apache2'],
-        ensure => running,
-        enable => true
-    }
+	service { 'apache2':
+			require => Package['apache2'],
+			ensure => running,
+			enable => true
+	}
 
-    # Make sure default vagrant user is in www-data group
+	# Make sure default vagrant user is in www-data group
 	exec { 'vagrant in www-data':
 		require => Package['apache2'],
 		command => '/usr/sbin/usermod -a -G www-data vagrant',
@@ -19,6 +19,8 @@ class hubzero_apache {
 	}
 
 	# mpm_event needs to be disabled before enabling mpm_prefork
+	# There is no particular reason to use mpm_prefork besides that mpm_event was causing issues
+	# with php and apache wouldn't start
 	file {'mpm_event.load':
 		path => '/etc/apache2/mods-enabled/mpm_event.load',
 		ensure => absent,

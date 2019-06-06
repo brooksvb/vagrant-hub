@@ -1,5 +1,11 @@
-class hubzero_mysql {
+class hubzero_mysql (
+  # TODO: Add parameter for seed file
+  # TODO: Add parameters for database name, user, password
+){
 
+  $database_seed_path = '/etc/mysql/hubzero_seed.sql'
+
+  # This handles setup and installation
   class { '::mysql::server':
     root_password           => '',
     remove_default_accounts => true
@@ -7,7 +13,7 @@ class hubzero_mysql {
 
   # Copy the seed sql to the machine because mysql::db sql param doesn't support puppet URI
   file { 'hubzero_seed.sql':
-    path => '/etc/mysql/hubzero_seed.sql',
+    path => "${database_seed_path}",
     ensure => present,
     source => 'puppet:///modules/hubzero_mysql/seed.sql'
   }
@@ -18,7 +24,7 @@ class hubzero_mysql {
     password => 'YMx7ZE35jw45f9',
     host     => 'localhost',
     grant    => ['ALL'],
-    sql => "/etc/mysql/hubzero_seed.sql"
+    sql => "${database_seed_path}"
   }
 
   exec { 'muse setup':
