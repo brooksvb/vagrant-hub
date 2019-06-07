@@ -68,7 +68,6 @@ unavoidable differences in the filesystem.
 ## Future Improvements
 * Flexible modules that can be used with other site specifications
 * Separate dev and production environment configurations
-* Addition of hubzero_mailhog module
 * Parameterization of more options such as PHP version selection
 * Addition of hubzero_wrapper module, which wraps all main modules together
 for simpler site configuration in one module
