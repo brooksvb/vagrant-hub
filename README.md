@@ -48,7 +48,8 @@ scripts)
 `vagrant ssh` - Self explanatory
 
 When you configure certain local services or programs to connect to the machine, you may do so
-through SSH. The best way to configure this is to configure the SSH connection to use a private
+through SSH tunnel. This works when some other methods like port forwarding don't seem to be working
+The best way to configure this is to configure the SSH connection to use a private
 key pair, then select the `private_key` that appears in `./.vagrant/machines/***/private_key`.
 You will use `vagrant` as the user.
 
