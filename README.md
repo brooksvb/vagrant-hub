@@ -67,6 +67,7 @@ Using this workflow on Windows may pose additional concerns, specifically due to
 unavoidable differences in the filesystem.
 
 ## Future Improvements
+* Change network configuration to use a private network so you can map a local IP to the site rather than port forward
 * Flexible modules that can be used with other site specifications
 * Separate dev and production environment configurations
 * Parameterization of more options such as PHP version selection
